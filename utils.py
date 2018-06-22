@@ -21,7 +21,7 @@ def save_filters(filters, img_width, img_height, layer, name):
                 (img_height + margin) * j: (img_height + margin) * j + img_height, :] = img
 
     # Save the final result
-    cv2.imwrite('output/filters_temp_'+ layer + '_' + name, stitched_filters)
+    cv2.imwrite('output/filters_'+ layer + '_' + name, stitched_filters)
 
 
 def deprocess_image(x):
