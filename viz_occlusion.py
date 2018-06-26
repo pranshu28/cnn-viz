@@ -1,0 +1,161 @@
+import argparse
+import math
+import time
+
+import matplotlib.pylab as plt
+import seaborn as sns
+
+from model import *
+from utils import *
+
+
+def get_occ_imgs(img, img_size, occ_size, occ_pixel, occ_stride, classes):
+	# Get original image
+	image = cv2.imread(img)
+	image = cv2.resize(image, (img_size, img_size)).astype(np.float32)
+
+	# Index of class with highest probability
+	class_index = np.argmax(classes)
+	print('Class index:', class_index)
+
+	# Define number of occlusions in both dimensions
+	output_height = int(math.ceil((img_size - occ_size) / occ_stride + 1))
+	output_width = int(math.ceil((img_size - occ_size) / occ_stride + 1))
+	print('Total iterations:', output_height, '*', output_width, '=', output_height * output_width)
+
+	# Initialize probability heatmap and occluded images
+	temp_img_list = []
+	probs = np.zeros((output_height, output_width))
+
+	start = time.time()
+
+	for h in range(output_height):
+		for w in range(output_width):
+			# Occluder region:
+			h_start = h * occ_stride
+			w_start = w * occ_stride
+			h_end = min(img_size, h_start + occ_size)
+			w_end = min(img_size, w_start + occ_size)
+
+			# Getting the image copy, applying the occluding window and classifying it:
+			input_image = image.copy()
+			input_image[h_start:h_end, w_start:w_end, :] = occ_pixel
+			predictions = pred_problist(model, input_image.copy())[0]
+			prob = predictions[class_index]
+
+			# Put probability value in heatmap
+			probs[h, w] = prob
+
+			# Collect occluded images
+			cv2.putText(img=input_image, text=str(prob), org=(w_start, int(h_start + (h_end - h_start) / 2)),
+						fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.3, color=(255, 255, 255), thickness=1)
+			temp_img_list.append(input_image)
+
+		print('Percentage done :', round(((h+1) * output_width) * 100 / (output_height * output_width), 2), '%')
+
+	end = time.time()
+	elapsed = end - start
+	print('Total time taken:', elapsed, 'sec\tAverage:', elapsed / (output_height * output_width), 'sec')
+
+	# Save all occluded images in one
+	save_occs(temp_img_list, img_size, img_size, img_path.split('/')[-1])
+
+	return probs
+
+
+def regularize(prob, norm, percentile):
+	# First save the original probs as heatmamp
+	f = plt.figure(1)
+	sns.heatmap(prob, xticklabels=False, yticklabels=False)
+	f.savefig('occ_exp/heatmap_' + img_path.split('/')[-1])
+
+	# Apply Regularization
+	prob = normalize_clip(prob) if norm else prob
+	clipped = clip_weak_pixel_regularization(prob, None, percentile=percentile)
+	reg_heat = blur_regularization(1 - clipped, None, size=(3, 3))
+
+	# Save regularized heatmap
+	f2 = plt.figure(2)
+	sns.heatmap(reg_heat, xticklabels=False, yticklabels=False)
+	f2.savefig('occ_exp/heatmap_reg_' + img_path.split('/')[-1])
+
+	return reg_heat
+
+
+def join(heat, img, img_size, occ_size):
+	# Get original image
+	image = cv2.imread(img, 1)
+	inp_img = cv2.resize(image, (img_size, img_size))
+
+	H, W = image.shape[0], image.shape[1]
+	bord = int(occ_size / 2)
+
+	# Define heatmap to be projected on original image and set border values
+	heatmap = np.zeros((img_size, img_size))
+	heatmap[bord:img_size - bord, bord:img_size - bord] = cv2.resize(heat,(img_size - occ_size, img_size - occ_size)).astype(np.float32)
+	np.place(heatmap, heatmap == 0.0, np.median(heatmap))
+
+	# Another way to define heatmap to handle border values
+	# heatmap = cv2.resize(heat, (img_size-occ_size, img_size-occ_size)).astype(np.float32)
+	# heatmap = cv2.copyMakeBorder(heatmap,bord,bord,bord,bord,cv2.BORDER_REPLICATE)
+
+	# Original image * heatmap
+	for i in range(3):
+		inp_img[:, :, i] = heatmap * inp_img[:, :, i]
+	inp_viz = cv2.resize(inp_img, (W, H))
+
+	# Save the final output
+	cv2.imwrite('occ_exp/final_' + img.split('/')[-1], inp_viz)
+
+	return inp_viz
+
+
+def get_args():
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--img', type=str)  # Path of the input image
+	parser.add_argument('--weights_path', type=str, default='vgg16_weights.h5')  # Path of the saved pre-trained model
+	parser.add_argument('--size', type=int, default='224')  # Layer name
+	parser.add_argument('--occ_size', type=int, default='40')  # Size of occluding window
+	parser.add_argument('--pixel', type=int, default='0')  # Occluding window - pixel values
+	parser.add_argument('--stride', type=int, default='5')  # Occlusion Stride
+	parser.add_argument('--norm', type=int, default='1')  # Normalize probabilities first
+	parser.add_argument('--percentile', type=int, default='25')  # Regularization percentile for heatmap
+	args = parser.parse_args()
+	return args
+
+
+if __name__ == '__main__':
+	args = get_args()
+	print('\n', args)
+
+	img_path, img_size = args.img, args.size
+	img_name = img_path.split('/')[-1].split('.')[0]
+	occ_size, occ_pixel, occ_stride = args.occ_size, args.pixel, args.stride
+
+	# Input pre-trained model
+	model = load_trained_model(args.weights_path)
+
+	# Get original image
+	input_image = cv2.imread(img_path)
+	input_image = cv2.resize(input_image, (img_size, img_size)).astype(np.float32)
+
+	# Get probability list and print top 5 classes
+	result = pred_problist(model, input_image)
+	de_result = decode_predictions(result)[0]
+	print('\nPredicted: ', de_result)
+
+	# Start occlusion experiment and store predicted probabilities in a file
+	print('Running occlusion iterations (Class:', de_result[0][1], ') ...\n')
+	probs = get_occ_imgs(img_path, img_size, occ_size, occ_pixel, occ_stride, result)
+	np.save('occ_exp/probs_' + img_name + '.npy', probs)
+
+	# Get probabilities and apply regularization
+	print('\nGetting probability heat-map and regularizing...')
+	probs = np.load('occ_exp/probs_' + img_name + '.npy')
+	heat = regularize(probs, args.norm, args.percentile)
+
+	# Project heatmap on original image
+	print('\nProject the heat-map to original image...')
+	aug = join(heat, img_path, img_size, occ_size)
+
+	print('\nDone')
