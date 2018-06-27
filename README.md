@@ -36,7 +36,7 @@ Layer Conv1_2 (All 64 filters)
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/cnn_filters/filters_conv1_2_index.jpeg "Layer Conv1_2")
 
 Finally, when we visualize the last convolution layer as it actually determines the output of the model. We select 16 random filters from the 
-set of 512. Here there is one filter that convincingly recognizes the shape of the bird with some details.
+set of 512. There is one filter that convincingly recognizes the shape of the bird with some more details in it.
 
 Layer Conv5_3 (Randomly chosen 16 filters)
 
