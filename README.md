@@ -54,8 +54,8 @@ Layer Conv5_3 (Randomly chosen 16 filters)
       --occ_size INT - Size of occluding window      
       --pixel INT - Occluding window - pixel values      
       --stride INT - Occlusion Stride      
-      --norm INT - Normalize probabilities before regularization 
-      --percentile INT - Regularization percentile for heatmap
+      --norm INT - Normalize probabilities first 
+      --percentile INT - Regularization percentile for heatmap 
 
 ###### Example:
 

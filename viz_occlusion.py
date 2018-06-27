@@ -91,14 +91,16 @@ def join(heat_reg, img, img_size, occ_size):
     bord = int(occ_size / 2)
 
     # Define heat-map to be projected on original image and set border values
-    heat_map = np.zeros((img_size, img_size))
-    heat_map[bord:img_size - bord, bord:img_size - bord] = cv2.resize(heat_reg,
-        (img_size - occ_size, img_size - occ_size)).astype(np.float32)
-    np.place(heat_map, heat_map == 0.0, np.median(heat_map))
+    # heat_map = np.zeros((img_size, img_size))
+    # heat_map[bord:img_size - bord, bord:img_size - bord] = cv2.resize(heat_reg,
+    #     (img_size - occ_size, img_size - occ_size)).astype(np.float32)
+    # np.place(heat_map, heat_map == 0.0, np.median(heat_map))
 
     # Another way to define heat-map to handle border values
     # heatmap = cv2.resize(heat, (img_size-occ_size, img_size-occ_size)).astype(np.float32)
     # heatmap = cv2.copyMakeBorder(heat-map,bord,bord,bord,bord,cv2.BORDER_REPLICATE)
+
+    heat_map = cv2.resize(heat_reg,(img_size, img_size)).astype(np.float32)
 
     # Original image * heat-map
     for i in range(3):
@@ -146,9 +148,9 @@ if __name__ == '__main__':
     print('\nPredicted: ', de_result)
 
     # Start occlusion experiment and store predicted probabilities in a file
-    print('Running occlusion iterations (Class:', de_result[0][1], ') ...\n')
-    probs = get_occ_imgs(img_path, img_size, occ_size, occ_pixel, occ_stride, result)
-    np.save('occ_exp/probs_' + img_name + '.npy', probs)
+    # print('Running occlusion iterations (Class:', de_result[0][1], ') ...\n')
+    # probs = get_occ_imgs(img_path, img_size, occ_size, occ_pixel, occ_stride, result)
+    # np.save('occ_exp/probs_' + img_name + '.npy', probs)
 
     # Get probabilities and apply regularization
     print('\nGetting probability heat-map and regularizing...')
