@@ -2,9 +2,7 @@
 
 #### Filter visualization - using gradient ascent algorithm
   
-  This method generates a synthetic image that maximally activates a neuron. 
-
-  We use a test image to visualize what part of the filters in a given convolution layer gets activated during the forward pass. Then, we backpropagate to compute gradients of the neuron values in the filters with respect to image pixels and update the image with these gradients. For better interpretation, we penalize these gradients with L2 norm and apply some more regularization techniques. Now, we subtract the original input image from updated one to visualize the activated part of the filters.
+  This method generates a synthetic image that maximally activates a neuron. We use a test image to visualize what part of the filters in a given convolution layer gets activated during the forward pass. Then, we backpropagate to compute gradients of the neuron values in the filters with respect to image pixels and update the image with these gradients. For better interpretation, we penalize these gradients with L2 norm and apply some more regularization techniques. Now, we subtract the original input image from updated one to visualize the activated part of the filters.
 
 
     usage: viz_gradient_ascent.py [--iterations ITERATIONS] [--img IMG] [--weights_path WEIGHTS_PATH] [--layer LAYER] [--num_filters NUM_FILTERS] [--size SIZE]
@@ -17,7 +15,7 @@
       --num_filters INT - Number of filters to vizualize
       --size INT - Image size
 
-###### Example:
+##### Example:
 
 Suppose the test image is of a bird:
 
@@ -57,7 +55,7 @@ Layer Conv5_3 (Randomly chosen 16 filters)
       --norm INT - Normalize probabilities first 
       --percentile INT - Regularization percentile for heatmap 
 
-###### Example:
+##### Example:
 
 For the given Test Image:
 

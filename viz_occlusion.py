@@ -135,7 +135,7 @@ if __name__ == '__main__':
     img_name = img_path.split('/')[-1].split('.')[0]
     occ_size, occ_pixel, occ_stride = args.occ_size, args.pixel, args.stride
 
-    # Input pre-trained model
+    # Input pre-trained model, defined in model.py
     model = load_trained_model(args.weights_path)
 
     # Get original image
@@ -148,9 +148,9 @@ if __name__ == '__main__':
     print('\nPredicted: ', de_result)
 
     # Start occlusion experiment and store predicted probabilities in a file
-    # print('Running occlusion iterations (Class:', de_result[0][1], ') ...\n')
-    # probs = get_occ_imgs(img_path, img_size, occ_size, occ_pixel, occ_stride, result)
-    # np.save('occ_exp/probs_' + img_name + '.npy', probs)
+    print('Running occlusion iterations (Class:', de_result[0][1], ') ...\n')
+    probs = get_occ_imgs(img_path, img_size, occ_size, occ_pixel, occ_stride, result)
+    np.save('occ_exp/probs_' + img_name + '.npy', probs)
 
     # Get probabilities and apply regularization
     print('\nGetting probability heat-map and regularizing...')

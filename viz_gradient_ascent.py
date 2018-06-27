@@ -68,10 +68,10 @@ if __name__ == "__main__":
     print(args)
     img_width, img_height = args.size, args.size
 
-    # define input placeholder and get model and weights
-    # input_placeholder = K.placeholder((1, img_width, img_height, 3))
+    # define input placeholder and get model and weights, functions defined in model.py
     first_layer = ZeroPadding2D((1, 1), input_shape=(img_width, img_height, 3))
     model = get_model(first_layer)
+    # input_placeholder = K.placeholder((1, img_width, img_height, 3))
     input_placeholder = model.input
     model = load_model_weights(model, args.weights_path)
 
@@ -94,7 +94,7 @@ if __name__ == "__main__":
     else:
         filter_indexes = range(0, layer.shape[3])
 
-    # Iteration for all filters
+    # Iterate for all filters
     filters_viz = [None] * len(filter_indexes)
     for i, index in enumerate(filter_indexes):
         filters_viz[i] = visualize_filter(init_img, index, input_placeholder, args.iterations)
