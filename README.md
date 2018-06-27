@@ -59,7 +59,7 @@ Layer Conv5_3 (Randomly chosen 16 filters)
 
 ##### Example:
 
-For the given Test Image:
+For the given test image:
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/test_image/bus.jpg "Test Image")
 

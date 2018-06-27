@@ -90,17 +90,19 @@ def join(heat_reg, img, img_size, occ_size):
     H, W = image.shape[0], image.shape[1]
     bord = int(occ_size / 2)
 
-    # Define heat-map to be projected on original image and set border values
+    # Define heat-map to be projected on original image
+    heat_map = cv2.resize(heat_reg,(img_size, img_size)).astype(np.float32)
+    
+    # Second way to define heat-map - manually set border values
     # heat_map = np.zeros((img_size, img_size))
     # heat_map[bord:img_size - bord, bord:img_size - bord] = cv2.resize(heat_reg,
     #     (img_size - occ_size, img_size - occ_size)).astype(np.float32)
     # np.place(heat_map, heat_map == 0.0, np.median(heat_map))
 
-    # Another way to define heat-map to handle border values
+    # Third way to define heat-map - replicate border values
     # heatmap = cv2.resize(heat, (img_size-occ_size, img_size-occ_size)).astype(np.float32)
     # heatmap = cv2.copyMakeBorder(heat-map,bord,bord,bord,bord,cv2.BORDER_REPLICATE)
 
-    heat_map = cv2.resize(heat_reg,(img_size, img_size)).astype(np.float32)
 
     # Original image * heat-map
     for i in range(3):
