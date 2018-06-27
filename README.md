@@ -35,7 +35,7 @@ Layer Conv5_3 (Randomly chosen 16 filters)
 
 #### Sensitivity of model - Occlusion experiment 
   
-  It finds the part of an input image that a neuron (usually a class neuron) responds to.
+  It finds the part of an input image that an output neuron responds to. It iterates a black square that occludes various parts of the image and monitors the output of the classifier model. This represents localization of the objects withing the image the probability of the correct class drops as a significant portion of the object is occluded.
 
     usage: viz_occlusion.py [--img IMG] [--weights_path WEIGHTS_PATH] [--size SIZE] [--occ_size OCC_SIZE] [--pixel PIXEL] [--stride STRIDE] [--norm NORM] [--percentile PERCENTILE]
 
@@ -46,7 +46,7 @@ Layer Conv5_3 (Randomly chosen 16 filters)
       --occ_size INT - Size of occluding window      
       --pixel INT - Occluding window - pixel values      
       --stride INT - Occlusion Stride      
-      --norm INT - Normalize probabilities first      
+      --norm INT - Normalize probabilities before regularization 
       --percentile INT - Regularization percentile for heatmap
 
 ###### Example:
@@ -57,14 +57,14 @@ For the given Test Image:
 
 The pre-trained CNN model predicted `Class: School Bus` with the highest probability of `0.86515594`.    
 
-Probability heat-map for `School bus` class after occlusion experiment:
+The following figure shows visualization of probabilities output for `School bus` class as a function of occluder position:
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/heatmap_bus.jpg "Probability heatmap after occlusion experiment")
 
-Regularized Heat-map
+To clearly localize the object, we regularize the above heatmap to extract its strongest features.
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/heatmap_reg_bus.jpg "Regularized Heatmap")
 
-Projection of heat-map on given image
+The below image shows projection of regularized heat-map on the input image. It proves that the above visualization genuinely corresponds to the object structure that stimulates these features.
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/final_bus.jpg "Projection of Heatmap on given image")
