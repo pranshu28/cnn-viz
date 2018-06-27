@@ -19,19 +19,19 @@
 
 Test Image:
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/test_image/index.jpeg "Test Image")
+![alt text](https://github.com/pranshu28/cnn-viz/test_image/index.jpeg "Test Image")
 
 Layer Conv1_1 (All 64 filters)
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/cnn_filters/filters_conv1_1_index.jpeg "Layer Conv1_1")
+![alt text](https://github.com/pranshu28/cnn-viz/cnn_filters/filters_conv1_1_index.jpeg "Layer Conv1_1")
 
 Layer Conv1_2 (All 64 filters)
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/cnn_filters/filters_conv1_2_index.jpeg "Layer Conv1_2")
+![alt text](https://github.com/pranshu28/cnn-viz/cnn_filters/filters_conv1_2_index.jpeg "Layer Conv1_2")
 
 Layer Conv5_3 (Randomly chosen 16 filters)
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/cnn_filters/filters_conv5_3_index.jpeg "Layer Conv5_3")
+![alt text](https://github.com/pranshu28/cnn-viz/cnn_filters/filters_conv5_3_index.jpeg "Layer Conv5_3")
 
 #### Sensitivity of model - Occlusion experiment 
   
@@ -53,18 +53,18 @@ Layer Conv5_3 (Randomly chosen 16 filters)
 
 For the given Test Image:
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/test_image/bus.jpg "Test Image")
+![alt text](https://github.com/pranshu28/cnn-viz/test_image/bus.jpg "Test Image")
 
 The pre-trained CNN model predicted `Class: School Bus` with the highest probability of `0.86515594`.    
 
 Probability heat-map for `School bus` class after occlusion experiment:
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/occ_exp/heatmap_bus.jpg "Probability heatmap after occlusion experiment")
+![alt text](https://github.com/pranshu28/cnn-viz/occ_exp/heatmap_bus.jpg "Probability heatmap after occlusion experiment")
 
 Regularized Heat-map
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/occ_exp/heatmap_reg_bus.jpg "Regularized Heatmap")
+![alt text](https://github.com/pranshu28/cnn-viz/occ_exp/heatmap_reg_bus.jpg "Regularized Heatmap")
 
 Projection of heat-map on given image
 
-![alt text](/home/pranshu/Documents/Projects/IITM/cnn-visualization/occ_exp/final_bus.jpg "Projection of Heatmap on given image")
+![alt text](https://github.com/pranshu28/cnn-viz/occ_exp/final_bus.jpg "Projection of Heatmap on given image")
