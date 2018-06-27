@@ -2,7 +2,9 @@
 
 #### Filter visualization - using gradient ascent algorithm
   
-  This method generates a synthetic image that maximally activates a neuron.
+  This method generates a synthetic image that maximally activates a neuron. 
+
+  We use a test image to visualize what part of the filters in a given convolution layer gets activated during the forward pass. Then, we backpropagate to compute gradients of the neuron values in the filters with respect to image pixels and update the image with these gradients. For better interpretation, we penalize these gradients with L2 norm and apply some more regularization techniques. Now, we subtract the original input image from updated one to visualize the activated part of the filters.
 
 
     usage: viz_gradient_ascent.py [--iterations ITERATIONS] [--img IMG] [--weights_path WEIGHTS_PATH] [--layer LAYER] [--num_filters NUM_FILTERS] [--size SIZE]
@@ -17,17 +19,24 @@
 
 ###### Example:
 
-Test Image:
+Suppose the test image is of a bird:
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/test_image/index.jpeg "Test Image")
+
+After one forward pass, if we visualize the filters in first layer (Conv1_1), we can clearly see the bird-like shape in some filters. These shapes corresponds to activated neurons in the filters that further helps the CNN model to recognize objects in the image. 
 
 Layer Conv1_1 (All 64 filters)
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/cnn_filters/filters_conv1_1_index.jpeg "Layer Conv1_1")
 
+Similarly, we visualize the filters in the second layer (Conv1_2) in which the activation maps are noisy but there are still a few filters has bird-like shape of activation map.
+
 Layer Conv1_2 (All 64 filters)
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/cnn_filters/filters_conv1_2_index.jpeg "Layer Conv1_2")
+
+Finally, when we visualize the last convolution layer as it actually determines the output of the model. We select 16 random filters from the 
+set of 512. Here there is one filter that convincingly recognizes the shape of the bird with some details.
 
 Layer Conv5_3 (Randomly chosen 16 filters)
 

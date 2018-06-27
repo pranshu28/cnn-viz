@@ -71,4 +71,4 @@ def save_occs(occ_img_list, img_width, img_height, img_path):
 
 def save_filters(filters, img_width, img_height, layer, name):
     stitched_filters = all_imgs_in_one(filters, img_width, img_height)
-    cv2.imwrite('cnn_filters/filters_' + layer + '_' + name, stitched_filters)
+    cv2.imwrite('cnn_filters/filters_pro_' + layer + '_' + name, stitched_filters)
