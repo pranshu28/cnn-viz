@@ -35,7 +35,7 @@ Layer Conv5_3 (Randomly chosen 16 filters)
 
 #### Sensitivity of model - Occlusion experiment 
   
-  It finds the part of an input image that an output neuron responds to. It iterates a black square that occludes various parts of the image and monitors the output of the classifier model. This represents localization of the objects withing the image the probability of the correct class drops as a significant portion of the object is occluded.
+  It finds the part of an input image that an output neuron responds to. It iterates a black square that occludes various parts of the image and monitors the output of the classifier model. This representation helps us to localize the objects withing the image due to the fact that when a significant portion of the object is occluded, the probability of the correct class drops.
 
     usage: viz_occlusion.py [--img IMG] [--weights_path WEIGHTS_PATH] [--size SIZE] [--occ_size OCC_SIZE] [--pixel PIXEL] [--stride STRIDE] [--norm NORM] [--percentile PERCENTILE]
 
