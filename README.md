@@ -61,10 +61,11 @@ The following figure shows visualization of probabilities output for `School bus
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/heatmap_bus.jpg "Probability heatmap after occlusion experiment")
 
-To clearly localize the object, we regularize the above heatmap to extract its strongest features.
+To clearly localize the object, we regularize the above heatmap to extract the strongest features.
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/heatmap_reg_bus.jpg "Regularized Heatmap")
 
 The below image shows projection of regularized heat-map on the input image. It proves that the above visualization genuinely corresponds to the object structure that stimulates these features.
 
+![alt text](https://github.com/pranshu28/cnn-viz/blob/master/test_image/bus.jpg "Test Image")
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/final_bus.jpg "Projection of Heatmap on given image")
