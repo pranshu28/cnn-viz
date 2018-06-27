@@ -19,7 +19,7 @@
 
 Test Image:
 
-![alt text](https://github.com/pranshu28/cnn-viz/blob/master/blob/master/test_image/index.jpeg "Test Image")
+![alt text](https://github.com/pranshu28/cnn-viz/blob/master/test_image/index.jpeg "Test Image")
 
 Layer Conv1_1 (All 64 filters)
 
