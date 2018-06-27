@@ -5,7 +5,8 @@
   This method generates a synthetic image that maximally activates a neuron. We use a test image to visualize what part of the filters in a given convolution layer gets activated during the forward pass. Then, we backpropagate to compute gradients of the neuron values in the filters with respect to image pixels and update the image with these gradients. For better interpretation, we penalize these gradients with L2 norm and apply some more regularization techniques. Now, we subtract the original input image from updated one to visualize the activated part of the filters.
 
 
-    usage: viz_gradient_ascent.py [--iterations ITERATIONS] [--img IMG] [--weights_path WEIGHTS_PATH] [--layer LAYER] [--num_filters NUM_FILTERS] [--size SIZE]
+    usage: 
+      viz_gradient_ascent.py [--iterations ITERATIONS] [--img IMG] [--weights_path WEIGHTS_PATH] [--layer LAYER] [--num_filters NUM_FILTERS] [--size SIZE]
 
     Arguments:
       --iterations INT - Number of gradient ascent iterations
@@ -41,9 +42,10 @@ Layer Conv5_3 (Randomly chosen 16 filters)
 
 #### Sensitivity of model - Occlusion experiment 
   
-  It finds the part of an input image that an output neuron responds to. It iterates a black square that occludes various parts of the image and monitors the output of the classifier model. This representation helps us to localize the objects withing the image due to the fact that when a significant portion of the object is occluded, the probability of the correct class drops.
+  It finds the part of an input image that an output neuron responds to. It iterates a blank window that occludes various parts of the image and monitors the output of the classifier model. This representation helps us to localize the objects withing the image due to the fact that when a significant portion of the object is occluded, the probability of the correct class drops.
 
-    usage: viz_occlusion.py [--img IMG] [--weights_path WEIGHTS_PATH] [--size SIZE] [--occ_size OCC_SIZE] [--pixel PIXEL] [--stride STRIDE] [--norm NORM] [--percentile PERCENTILE]
+    usage: 
+      viz_occlusion.py [--img IMG] [--weights_path WEIGHTS_PATH] [--size SIZE] [--occ_size OCC_SIZE] [--pixel PIXEL] [--stride STRIDE] [--norm NORM] [--percentile PERCENTILE]
 
     Arguments:
       --img STRING - Path of the input image      
@@ -71,7 +73,15 @@ To clearly localize the object, we regularize the above heatmap to extract the s
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/heatmap_reg_bus.jpg "Regularized Heatmap")
 
-The below image shows projection of regularized heat-map on the input image. It proves that the above visualization genuinely corresponds to the object structure that stimulates these features.
+The below images show before and after projection of regularized heat-map on the input image. It proves that the above visualization genuinely corresponds to the object structure that stimulates these features.
 
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/test_image/bus.jpg "Test Image")
 ![alt text](https://github.com/pranshu28/cnn-viz/blob/master/occ_exp/final_bus.jpg "Projection of Heatmap on given image")
+
+
+#### References:
+* Visualizing what ConvNets learn - Andrej Karpathy. ([link](http://cs231n.github.io/understanding-cnn/))
+* Convolutional Neural Networks for Visual Recognition - CS231n. ([lecture](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture12.pdf))
+* How convolutional neural networks see the world - Francois Chollet. ([link](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html), [github](https://github.com/fchollet/keras/blob/master/examples/conv_filter_visualization.py))
+* Visualizing and Understanding Convolutional Networks - Matthew D Zeiler and Rob Fergus. ([paper](https://arxiv.org/abs/1311.2901))
+* Occlusion experiments - DaoYu Lin. ([github](https://github.com/BUPTLdy/occlusion_experiments/blob/master/Occlusion_experiments.ipynb))
