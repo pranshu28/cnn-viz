@@ -53,7 +53,7 @@ def get_occ_imgs(img, img_size, occ_size, occ_pixel, occ_stride, classes):
             cv2.imwrite('occ_exp/video/'+img_name+str(h*output_width+w+1).zfill(6)+'.png',occ_image) 
             
             # To convert saved images as a video, run the following shell command
-            """ffmpeg -framerate 5 -i occ_exp/video/<img_name>%06d.jpg -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p <img_name>.mp4"""
+            """ffmpeg -framerate 5 -i occ_exp/video/<img_name>%06d.jpg -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p occ_exp/<img_name>.mp4"""
 
             temp_img_list.append(occ_image)
 
