@@ -43,12 +43,18 @@ def get_occ_imgs(img, img_size, occ_size, occ_pixel, occ_stride, classes):
             predictions = pred_prob_list(model, occ_image.copy())[0]
             prob = predictions[class_index]
 
-            # Put probability value in heatmap
+            # Collect the probability value in a matrix
             prob_matrix[h, w] = prob
 
-            # Collect occluded images
-            cv2.putText(img=occ_image, text=str(prob), org=(w_start, int(h_start + (h_end - h_start) / 2)),
-                        fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.3, color=(255, 255, 255), thickness=1)
+            # Collect occluded images   
+            occ_image[h_start:h_end, w_start:w_end, :] = prob*255
+            cv2.putText(img=occ_image, text=str(round(prob,4)), org=(w_start, int(h_start + (h_end - h_start) / 2)),
+                        fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.3, color=(255*(1-prob),255*(1-prob),255*(1-prob)), thickness=1)  
+            cv2.imwrite('occ_exp/video/'+img_name+str(h*output_width+w+1).zfill(6)+'.png',occ_image) 
+            
+            # To convert saved images as a video, run the following shell command
+            """ffmpeg -framerate 5 -i occ_exp/video/<img_name>%06d.jpg -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p <img_name>.mp4"""
+
             temp_img_list.append(occ_image)
 
         print('Percentage done :', round(((h + 1) * output_width) * 100 / (output_height * output_width), 2), '%')
@@ -57,8 +63,9 @@ def get_occ_imgs(img, img_size, occ_size, occ_pixel, occ_stride, classes):
     elapsed = end - start
     print('Total time taken:', elapsed, 'sec\tAverage:', elapsed / (output_height * output_width), 'sec')
 
-    # Save all occluded images in one
-    save_occs(temp_img_list, img_size, img_size, img_path.split('/')[-1])
+    # Save probabilities and all occluded images in one
+    np.save('occ_exp/probs_' + img_name + '.npy', prob_matrix)
+    # save_occs(temp_img_list, img_size, img_size, img_path.split('/')[-1])
 
     return prob_matrix
 
@@ -152,7 +159,6 @@ if __name__ == '__main__':
     # Start occlusion experiment and store predicted probabilities in a file
     print('Running occlusion iterations (Class:', de_result[0][1], ') ...\n')
     probs = get_occ_imgs(img_path, img_size, occ_size, occ_pixel, occ_stride, result)
-    np.save('occ_exp/probs_' + img_name + '.npy', probs)
 
     # Get probabilities and apply regularization
     print('\nGetting probability heat-map and regularizing...')
